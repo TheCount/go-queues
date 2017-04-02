@@ -17,20 +17,21 @@ func TestLockedQueue( t *testing.T ) {
 	f.commit()
 	f.reset()
 	// Parallel queue check
+	const iterations = 10000
 	var wg sync.WaitGroup
 	writer := func() {
 		defer wg.Done()
-		for i := 0; i != 10000; i++ {
+		for i := 1; i <= iterations; i++ {
 			enqueue( i )
 		}
 	}
 	reader := func() {
 		defer wg.Done()
-		previous := -1
+		previous := 0
 		minimum := 0
-		for i := 0; i != 100000; i++ {
+		for i := 1; i <= 10 * iterations; i++ {
 			x, ok := dequeue()
-			if ( previous == 100 ) && ( minimum == 100 ) && ok {
+			if ( previous == iterations ) && ( minimum == iterations ) && ok {
 				t.Errorf( "Spurious successful dequeue: %d", x )
 			}
 			if !ok {
