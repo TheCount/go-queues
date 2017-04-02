@@ -36,7 +36,7 @@ func TestCapacity( t *testing.T ) {
 	}
 }
 
-func TestSimpleQueue ( t *testing.T ) {
+func TestSimpleQueue( t *testing.T ) {
 	// Build queue
 	f := newSimpleQueueFactory( 0 )
 	f.prepare()
