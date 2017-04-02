@@ -1,7 +1,7 @@
 package queue_test
 
 import(
-	"go-queues/queue"
+	"github.com/TheCount/go-queues/queue"
 	"log"
 	"sync"
 )
