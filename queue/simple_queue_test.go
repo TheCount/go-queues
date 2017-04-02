@@ -27,7 +27,7 @@ import(
 	"testing"
 )
 
-func TestCapacity( t *testing.T ) {
+func TestSimpleCapacity( t *testing.T ) {
 	for i := -3; i < 4; i++ {
 		f := newSimpleQueueFactory( i ).( *simpleQueueFactory )
 		if f.capacityPerBuffer < 1 {
