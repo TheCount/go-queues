@@ -20,6 +20,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+// Package queue provides implementations of the queue abstract data type
+// based on a simple configuration scheme in a type-safe manner.
+// For created queues, type safety is ensured at compile time.
+//
+// Clients provide their own queue data structure
+// modelled after the GenericQueue type.
+// The dummy type T in GenericQueue
+// should be replaced by the appropriate type.
+// A pointer to an instance can then be passed to the Make function,
+// which will fill in the queue methods.
+// Queue methods are identified by structure tags (see GenericQueue).
+// Other structure fields are ignored by the Make function.
+//
+// A configuration can be passed to the Make function,
+// choosing an implementation with specific characteristics for the queue.
+// For example, configurable parameters are initial queue buffer size or
+// whether the queue should be safe to access concurrently.
+// The default configuration yields a queue suitable for most uses.
 package queue
 
 // Version information for the queue package.
