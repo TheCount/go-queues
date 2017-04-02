@@ -117,6 +117,6 @@ func ( c *Config ) factory() factory {
 	if ( c.Flags & FNonConcurrent ) != 0 {
 		return newSimpleQueueFactory( c.initialCapacity )
 	} else {
-		return nil
+		return newLockedQueueFactory( c.initialCapacity )
 	}
 }
