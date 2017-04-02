@@ -30,6 +30,7 @@ func ( q *simpleQueue ) dequeue() ( x interface{}, ok bool ) {
 		return
 	}
 	x = q.buf1[q.start]
+	q.buf1[q.start] = nil
 	ok = true
 	q.start++
 	if q.start == len( q.buf1 ) {
