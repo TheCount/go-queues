@@ -44,17 +44,21 @@ func ( q *simpleQueue ) dequeue() ( x interface{}, ok bool ) {
 
 // simpleQueueFactory implements factory for simpleQueue
 type simpleQueueFactory struct {
+	dbFactory
 	sq *simpleQueue
-	capacityPerBuffer int
 }
 
-func ( sqf *simpleQueueFactory ) prepare() {
-	sqf.sq = &simpleQueue{
-		buf1: make( []interface{}, sqf.capacityPerBuffer ),
-		buf2: make( []interface{}, sqf.capacityPerBuffer ),
+func newSimpleQueue( capacityPerBuffer int ) *simpleQueue {
+	return &simpleQueue{
+		buf1: make( []interface{}, capacityPerBuffer ),
+		buf2: make( []interface{}, capacityPerBuffer ),
 		start: 0,
 		end: 0,
 	}
+}
+
+func ( sqf *simpleQueueFactory ) prepare() {
+	sqf.sq = newSimpleQueue( sqf.capacityPerBuffer )
 }
 
 func ( sqf *simpleQueueFactory ) commit() {
@@ -62,29 +66,11 @@ func ( sqf *simpleQueueFactory ) commit() {
 }
 
 func ( sqf *simpleQueueFactory ) makeEnqueue( methodType reflect.Type ) reflect.Value {
-	q := sqf.sq
-	return reflect.MakeFunc( methodType, func( args []reflect.Value ) []reflect.Value {
-		q.enqueue( args[0].Interface() )
-		return []reflect.Value{}
-	} )
+	return makeEnqueue( sqf.sq, methodType )
 }
 
 func( sqf *simpleQueueFactory ) makeDequeue( methodType reflect.Type ) reflect.Value {
-	q := sqf.sq
-	return reflect.MakeFunc( methodType, func( args []reflect.Value ) []reflect.Value {
-		x, ok := q.dequeue()
-		if ok {
-			return []reflect.Value{
-				reflect.ValueOf( x ),
-				reflect.ValueOf( ok ),
-			}
-		} else {
-			return []reflect.Value{
-				reflect.Zero( methodType.Out( 0 ) ),
-				reflect.ValueOf( ok ),
-			}
-		}
-	} )
+	return makeDequeue( sqf.sq, methodType )
 }
 
 func ( sqf *simpleQueueFactory ) reset() {
@@ -92,13 +78,8 @@ func ( sqf *simpleQueueFactory ) reset() {
 }
 
 func newSimpleQueueFactory( initialCapacity int ) factory {
-	capacityPerBuffer := initialCapacity / 2
-	if capacityPerBuffer < 1 {
-		capacityPerBuffer = 1
-	}
-
 	return &simpleQueueFactory{
+		dbFactory: *newDbFactory( initialCapacity ),
 		sq: nil,
-		capacityPerBuffer: capacityPerBuffer,
 	}
 }

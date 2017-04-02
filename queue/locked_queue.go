@@ -25,18 +25,13 @@ func ( q *lockedQueue ) dequeue() ( interface{}, bool ) {
 
 // lockedQueueFactory implements factory for lockedQueue
 type lockedQueueFactory struct {
+	dbFactory
 	lq *lockedQueue
-	capacityPerBuffer int
 }
 
 func ( lqf *lockedQueueFactory ) prepare() {
 	lqf.lq = &lockedQueue{
-		simpleQueue: simpleQueue{
-			buf1: make( []interface{}, lqf.capacityPerBuffer ),
-			buf2: make( []interface{}, lqf.capacityPerBuffer ),
-			start: 0,
-			end: 0,
-		},
+		simpleQueue: *newSimpleQueue( lqf.capacityPerBuffer ),
 		mx: sync.Mutex{},
 	}
 }
@@ -46,29 +41,11 @@ func ( lqf *lockedQueueFactory ) commit() {
 }
 
 func ( lqf *lockedQueueFactory ) makeEnqueue( methodType reflect.Type ) reflect.Value {
-	q := lqf.lq
-	return reflect.MakeFunc( methodType, func( args []reflect.Value ) []reflect.Value {
-		q.enqueue( args[0].Interface() )
-		return []reflect.Value{}
-	} )
+	return makeEnqueue( lqf.lq, methodType )
 }
 
 func( lqf *lockedQueueFactory ) makeDequeue( methodType reflect.Type ) reflect.Value {
-	q := lqf.lq
-	return reflect.MakeFunc( methodType, func( args []reflect.Value ) []reflect.Value {
-		x, ok := q.dequeue()
-		if ok {
-			return []reflect.Value{
-				reflect.ValueOf( x ),
-				reflect.ValueOf( ok ),
-			}
-		} else {
-			return []reflect.Value{
-				reflect.Zero( methodType.Out( 0 ) ),
-				reflect.ValueOf( ok ),
-			}
-		}
-	} )
+	return makeDequeue( lqf.lq, methodType )
 }
 
 func ( lqf *lockedQueueFactory ) reset() {
@@ -76,13 +53,8 @@ func ( lqf *lockedQueueFactory ) reset() {
 }
 
 func newLockedQueueFactory( initialCapacity int ) factory {
-	capacityPerBuffer := initialCapacity / 2
-	if capacityPerBuffer < 1 {
-		capacityPerBuffer = 1
-	}
-
 	return &lockedQueueFactory{
+		dbFactory: *newDbFactory( initialCapacity ),
 		lq: nil,
-		capacityPerBuffer: capacityPerBuffer,
 	}
 }

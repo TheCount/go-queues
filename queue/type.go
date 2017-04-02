@@ -28,3 +28,9 @@ type GenericQueue struct {
 	// If you like, you can give this function a different name.
 	Dequeue func()( x T, ok bool ) `queue:"dequeue"`
 }
+
+// interfaceQueue is the minimal generic queue interface used internally.
+type interfaceQueue interface {
+	enqueue( x interface{} )
+	dequeue() ( x interface{}, ok bool )
+}
