@@ -115,7 +115,8 @@ type structOKUnusualNames struct {
 func TestMake( t *testing.T ) {
 	// Create configurations
 	config := DefaultConfig().NonConcurrent()
-	configNotImplemented := DefaultConfig() // FIXME: implemented configs are implemented once implemented ;-)
+	configNotImplemented := DefaultConfig()
+	configNotImplemented.Flags |= FNotImplemented
 	configInvalid := DefaultConfig()
 	configInvalid.Flags |= FNonConcurrent | FMultiReader | FMultiWriter
 	// nil interface

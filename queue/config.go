@@ -20,6 +20,11 @@ const(
 	// can enqueue safely to the queue concurrently.
 	// This flag is mutually exclusive with FNonConcurrent
 	FMultiWriter
+
+	// FNotImplemented forces the configurator to assume that there is no
+	// implementation for the specified configuration.
+	// Can be used for testing purposes.
+	FNotImplemented Flags = 1 << 63
 )
 
 // DefaultInitialCapacity is the initial capacity used by DefaultConfig()
@@ -106,6 +111,9 @@ func DefaultConfig() *Config {
 // factory returns a factory for this configuration.
 // If no matching implementation exists, nil is returned.
 func ( c *Config ) factory() factory {
+	if ( c.Flags & FNotImplemented ) != 0 {
+		return nil
+	}
 	if ( c.Flags & FNonConcurrent ) != 0 {
 		return newSimpleQueueFactory( c.initialCapacity )
 	} else {
