@@ -3,4 +3,7 @@ language: go
 go:
         - 1.6
 
-script: go test -v github.com/TheCount/go-queues/queue
+script: go test -v -coverprofile=coverage.txt -covermode=atomic github.com/TheCount/go-queues/queue
+
+after_success:
+        - bash <(curl -s https://codecov.io/bash)
