@@ -1,3 +1,8 @@
+# Status
+
+[![Build Status (master)](https://travis-ci.org/TheCount/go-queues.svg?branch=master)](https://travis-ci.org/TheCount/go-queues)
+[![Build Status (develop)](https://travis-ci.org/TheCount/go-queues.svg?branch=develop)](https://travis-ci.org/TheCount/go-queues)
+
 # About
 
 This [Go](https://golang.org) package provides implementations
