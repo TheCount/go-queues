@@ -1,7 +1,9 @@
 # Status
 
-[![Build Status (master)](https://travis-ci.org/TheCount/go-queues.svg?branch=master)](https://travis-ci.org/TheCount/go-queues)
-[![Build Status (develop)](https://travis-ci.org/TheCount/go-queues.svg?branch=develop)](https://travis-ci.org/TheCount/go-queues)
+| Branch  | Testsuite | Coverage |
+|---------|-----------|----------|
+| master  | [![Test Status (master)](https://travis-ci.org/TheCount/go-queues.svg?branch=master)](https://travis-ci.org/TheCount/go-queues) | [![Coverage (master)](https://img.shields.io/codecov/c/github/TheCount/go-queues/master.svg)](https://codecov.io/gh/TheCount/go-queues/branch/master) |
+| develop | [![Test Status (develop)](https://travis-ci.org/TheCount/go-queues.svg?branch=develop)](https://travis-ci.org/TheCount/go-queues) | [![Coverage (develop)](https://img.shields.io/codecov/c/github/TheCount/go-queues/develop.svg)](https://codecov.io/gh/TheCount/go-queues/branch/develop) |
 
 # About
 
